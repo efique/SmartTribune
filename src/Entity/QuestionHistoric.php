@@ -35,6 +35,11 @@ class QuestionHistoric
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $QA_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +80,18 @@ class QuestionHistoric
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getQAId(): ?int
+    {
+        return $this->QA_id;
+    }
+
+    public function setQAId(int $QA_id): self
+    {
+        $this->QA_id = $QA_id;
 
         return $this;
     }

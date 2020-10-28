@@ -13,11 +13,14 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class QAController extends AbstractController
 {
-    const STATUS_FAQ = 'faq';
-    const STATUS_BOT = 'bot';
+    const CHANNEL_FAQ = 'faq';
+    const CHANNEL_BOT = 'bot';
 
     /**
      * @Route("/qa", name="create_qa")
@@ -29,13 +32,14 @@ class QAController extends AbstractController
         $date = new \DateTime('now');
         settype($body, "string");
         settype($channel, "string");
+        $channel = json_decode($request->getContent(),true)['answers'][0];
         
         $qa = new QuestionAnswer();
         $qa->setTitle(json_decode($request->getContent(),true)['title']);
         $qa->setPromoted(json_decode($request->getContent(),true)['promoted']);
         $qa->setStatus(json_decode($request->getContent(),true)['status']);
-        if (!in_array($channel, array(self::STATUS_FAQ, self::STATUS_BOT))) {
-            throw new \InvalidArgumentException("Invalid status");
+        if (!in_array($channel, array(self::CHANNEL_FAQ, self::CHANNEL_BOT))) {
+            throw new \InvalidArgumentException("Invalid channel");
         }else{
             $qa->setAnswers(json_decode($request->getContent(),true)['answers']);
         }
